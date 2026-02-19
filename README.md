@@ -1,43 +1,42 @@
-# Astro Starter Kit: Minimal
+# The RFC Journal
 
-```sh
-npm create astro@latest -- --template minimal
+A newspaper-style archive of Internet protocol standards, inspired by the design principles of The Wall Street Journal.
+
+**Live Site:** [jermainebethune.github.io/rfc-journal](https://jermainebethune.github.io/rfc-journal/)
+
+## Purpose
+
+The RFC Journal provides a clean, readable interface for exploring the foundational standards documents that power the Internet. Rather than the utilitarian presentation of traditional RFC archives, this site applies classic newspaper design principles to make technical standards more approachable:
+
+- **Curated Protocol Collections** — RFCs organized by protocol family (UDP, QUIC) rather than raw chronological listing
+- **Editorial Hierarchy** — Clear visual structure distinguishes between protocols, document metadata, and content
+- **Typography-First Design** — Serif headlines, readable body text, and proper typographic scale
+
+## Design
+
+Built with [Astro](https://astro.build) for zero-JavaScript static output. The design system draws from WSJ's editorial style:
+
+| Element | Implementation |
+|---------|----------------|
+| Headlines | Playfair Display (serif) |
+| Body Text | Source Serif 4 |
+| UI/Labels | Source Sans 3 |
+| Colors | Black on cream (#FBF8F3), WSJ blue (#0274B6) accents |
+| Layout | Multi-column grid with traditional newspaper rules |
+
+## Protocols Covered
+
+- **UDP** — User Datagram Protocol (12 RFCs, 1980–2022)
+- **QUIC** — Modern encrypted transport (12 RFCs, 2021–2023)
+
+## Development
+
+```bash
+npm install
+npm run dev      # Start dev server at localhost:4321
+npm run build    # Build static site to ./dist
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## License
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Content derived from IETF RFC documents, which are public standards.
