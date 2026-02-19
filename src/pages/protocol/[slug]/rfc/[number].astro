@@ -1,0 +1,119 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import data from '../../../../data/rfcs.json';
+
+export function getStaticPaths() {
+  return data.protocols.flatMap((protocol) =>
+    protocol.rfcs.map((rfc) => ({
+      params: { slug: protocol.slug, number: String(rfc.number) },
+      props: { protocol, rfc },
+    }))
+  );
+}
+
+const { protocol, rfc } = Astro.props;
+
+function getStatusClass(status: string) {
+  if (status.includes('Standard')) return 'badge-standard';
+  if (status.includes('Proposed')) return 'badge-proposed';
+  if (status.includes('Experimental')) return 'badge-experimental';
+  return 'badge-informational';
+}
+
+const ietfUrl = `https://www.rfc-editor.org/rfc/rfc${rfc.number}`;
+const datatrackerUrl = `https://datatracker.ietf.org/doc/rfc${rfc.number}/`;
+---
+
+<Layout title={`RFC ${rfc.number} — ${rfc.title}`}>
+  <div class="container" style="max-width: 48rem;">
+    
+    <!-- Breadcrumb -->
+    <nav class="font-ui" style="font-size: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid var(--color-gray-300); margin-bottom: 2rem;">
+      <a href="/" style="color: var(--color-wsj-blue);">Home</a>
+      <span style="margin: 0 0.5rem; color: var(--color-gray-400);">/</span>
+      <a href={`/protocol/${protocol.slug}`} style="color: var(--color-wsj-blue);">{protocol.name}</a>
+      <span style="margin: 0 0.5rem; color: var(--color-gray-400);">/</span>
+      <span style="font-weight: 600;">RFC {rfc.number}</span>
+    </nav>
+    
+    <!-- Article Header -->
+    <header style="padding-bottom: 1.5rem; border-bottom: 1px solid var(--color-gray-300); margin-bottom: 1.5rem;">
+      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem;">
+        <span class="font-ui" style="font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.25rem 0.5rem; border: 1px solid var(--color-wsj-blue); color: var(--color-wsj-blue);">
+          {protocol.name}
+        </span>
+        <span class={`badge ${getStatusClass(rfc.status)}`}>{rfc.status}</span>
+      </div>
+      
+      <h1 class="font-headline" style="font-size: 2.5rem; line-height: 1.15; margin-bottom: 0.75rem;">
+        RFC {rfc.number}
+      </h1>
+      
+      <p class="font-body" style="font-size: 1.375rem; color: var(--color-gray-700);">
+        {rfc.title}
+      </p>
+      
+      <p class="font-ui" style="font-size: 0.875rem; color: var(--color-gray-600); margin-top: 0.75rem;">
+        Published {rfc.year}
+      </p>
+    </header>
+    
+    <!-- Metadata Grid -->
+    <section style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--color-gray-200); border: 1px solid var(--color-gray-200); margin-bottom: 2rem;">
+      <div style="background: var(--color-white); padding: 1rem;">
+        <p class="kicker" style="margin-bottom: 0.25rem;">Number</p>
+        <p class="font-mono" style="font-size: 1.25rem; font-weight: 600;">{rfc.number}</p>
+      </div>
+      <div style="background: var(--color-white); padding: 1rem;">
+        <p class="kicker" style="margin-bottom: 0.25rem;">Published</p>
+        <p class="font-headline" style="font-size: 1.25rem;">{rfc.year}</p>
+      </div>
+      <div style="background: var(--color-white); padding: 1rem;">
+        <p class="kicker" style="margin-bottom: 0.25rem;">Status</p>
+        <p class="font-ui" style="font-size: 1rem; font-weight: 600;">{rfc.status}</p>
+      </div>
+      <div style="background: var(--color-white); padding: 1rem;">
+        <p class="kicker" style="margin-bottom: 0.25rem;">Protocol</p>
+        <p class="font-ui" style="font-size: 1rem; font-weight: 600;">{protocol.name}</p>
+      </div>
+    </section>
+    
+    <!-- Abstract -->
+    {rfc.description && (
+      <section style="margin-bottom: 2rem;">
+        <h3 class="font-ui" style="font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding-bottom: 0.5rem; border-bottom: 1px solid var(--color-gray-300); margin-bottom: 1rem;">
+          Abstract
+        </h3>
+        <p class="font-body" style="font-size: 1.0625rem; line-height: 1.8; color: var(--color-gray-800);">
+          {rfc.description}
+        </p>
+      </section>
+    )}
+    
+    <!-- Actions -->
+    <section style="display: flex; gap: 1rem; padding: 1.5rem 0; border-top: 1px solid var(--color-gray-300); border-bottom: 1px solid var(--color-gray-300);">
+      <a href={ietfUrl} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+        Read Full Text →
+      </a>
+      <a href={datatrackerUrl} target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+        IETF Datatracker →
+      </a>
+    </section>
+    
+    <!-- Back Link -->
+    <div style="margin-top: 1.5rem;">
+      <a href={`/protocol/${protocol.slug}`} class="font-ui" style="font-size: 0.875rem; font-weight: 600; color: var(--color-wsj-blue);">
+        ← Back to {protocol.name} Index
+      </a>
+    </div>
+    
+  </div>
+</Layout>
+
+<style>
+  @media (max-width: 640px) {
+    section:nth-of-type(1) {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+  }
+</style>

@@ -1,0 +1,146 @@
+---
+import Layout from '../layouts/Layout.astro';
+import data from '../data/rfcs.json';
+
+const protocols = data.protocols;
+const totalRfcs = protocols.reduce((sum, p) => sum + p.rfcs.length, 0);
+---
+
+<Layout title="The RFC Journal — Internet Protocol Standards">
+  <div class="container">
+    
+    <!-- Lead Section -->
+    <section style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; padding-bottom: 2rem; border-bottom: 2px solid var(--color-black);">
+      
+      <!-- Main Story -->
+      <article style="border-right: 1px solid var(--color-gray-300); padding-right: 2rem;">
+        <p class="section-label">Featured</p>
+        <h2 class="font-headline" style="font-size: 2.5rem; line-height: 1.15; margin-bottom: 1rem;">
+          The Standards That Built the Internet
+        </h2>
+        <p class="font-body" style="font-size: 1.125rem; line-height: 1.8; color: var(--color-gray-800); margin-bottom: 1rem;">
+          From the foundational UDP specification published in 1980 to the modern QUIC protocol 
+          powering today's web, these standards documents define how data moves across the global network.
+          Each RFC represents years of collaborative engineering by the Internet Engineering Task Force.
+        </p>
+        <p class="font-body" style="color: var(--color-gray-700);">
+          This archive contains <strong>{totalRfcs} standards documents</strong> spanning four decades 
+          of internet protocol development, organized by protocol family for easy reference.
+        </p>
+      </article>
+      
+      <!-- Sidebar Stats -->
+      <aside>
+        <div class="rule-top-heavy" style="margin-bottom: 1.5rem;">
+          <p class="kicker" style="margin-bottom: 0.25rem;">Total Documents</p>
+          <p class="font-headline" style="font-size: 3.5rem; line-height: 1;">{totalRfcs}</p>
+        </div>
+        
+        <div class="rule-top" style="margin-bottom: 1.5rem;">
+          <p class="kicker" style="margin-bottom: 0.25rem;">Protocols Covered</p>
+          <p class="font-headline" style="font-size: 3.5rem; line-height: 1;">{protocols.length}</p>
+        </div>
+        
+        <div class="rule-top">
+          <p class="kicker" style="margin-bottom: 0.25rem;">Years Spanning</p>
+          <p class="font-headline" style="font-size: 3.5rem; line-height: 1;">45</p>
+          <p class="font-ui text-sm text-gray-600" style="margin-top: 0.25rem;">1980 – 2025</p>
+        </div>
+      </aside>
+    </section>
+    
+    <!-- Protocol Index -->
+    <section style="padding-top: 2rem;">
+      <h3 class="font-ui" style="font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding-bottom: 0.75rem; border-bottom: 1px solid var(--color-gray-300); margin-bottom: 1.5rem;">
+        Protocol Index
+      </h3>
+      
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem;">
+        {protocols.map((protocol) => (
+          <article style="border-bottom: 1px solid var(--color-gray-200); padding-bottom: 1.5rem;">
+            <a href={`/protocol/${protocol.slug}`} style="color: inherit; text-decoration: none; display: block;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
+                <h4 class="font-headline" style="font-size: 1.75rem;">
+                  {protocol.name}
+                </h4>
+                <span class="font-ui text-sm text-gray-500">
+                  {protocol.rfcs.length} RFCs
+                </span>
+              </div>
+              <p class="kicker" style="margin-bottom: 0.75rem;">{protocol.fullName}</p>
+              <p class="font-body" style="font-size: 0.9375rem; line-height: 1.7; color: var(--color-gray-700); margin-bottom: 0.75rem;">
+                {protocol.description}
+              </p>
+              <span class="font-ui" style="font-size: 0.75rem; font-weight: 600; color: var(--color-wsj-blue);">
+                READ MORE →
+              </span>
+            </a>
+          </article>
+        ))}
+      </div>
+    </section>
+    
+    <!-- Recent Standards -->
+    <section style="margin-top: 3rem; padding-top: 2rem; border-top: 2px solid var(--color-black);">
+      <h3 class="font-ui" style="font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding-bottom: 0.75rem; border-bottom: 1px solid var(--color-gray-300); margin-bottom: 0;">
+        Recent Standards
+      </h3>
+      
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 100px;">RFC</th>
+            <th>Title</th>
+            <th style="width: 80px;">Year</th>
+            <th style="width: 140px;">Protocol</th>
+          </tr>
+        </thead>
+        <tbody>
+          {protocols.flatMap(p => p.rfcs.map(r => ({...r, protocol: p.name, protocolSlug: p.slug})))
+            .sort((a, b) => b.year - a.year)
+            .slice(0, 8)
+            .map((rfc) => (
+              <tr>
+                <td>
+                  <a href={`/protocol/${rfc.protocolSlug}/rfc/${rfc.number}`} class="font-mono" style="font-weight: 600;">
+                    RFC {rfc.number}
+                  </a>
+                </td>
+                <td>
+                  <a href={`/protocol/${rfc.protocolSlug}/rfc/${rfc.number}`} style="color: var(--color-black);">
+                    {rfc.title}
+                  </a>
+                </td>
+                <td class="text-gray-600">{rfc.year}</td>
+                <td>
+                  <span class="badge badge-standard">{rfc.protocol}</span>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </section>
+    
+  </div>
+</Layout>
+
+<style>
+  @media (max-width: 768px) {
+    section:first-of-type {
+      grid-template-columns: 1fr !important;
+    }
+    
+    section:first-of-type article {
+      border-right: none !important;
+      padding-right: 0 !important;
+      border-bottom: 1px solid var(--color-gray-300);
+      padding-bottom: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    section:nth-of-type(2) > div {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>

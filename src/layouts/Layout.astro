@@ -1,0 +1,76 @@
+---
+interface Props {
+  title?: string;
+}
+
+const { title = "The RFC Journal" } = Astro.props;
+const today = new Date().toLocaleDateString('en-US', { 
+  weekday: 'long', 
+  year: 'numeric', 
+  month: 'long', 
+  day: 'numeric' 
+});
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A newspaper-style archive of Internet protocol standards" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <!-- Masthead -->
+    <header style="background: var(--color-white); border-bottom: 1px solid var(--color-gray-200);">
+      <div class="container">
+        <!-- Top bar -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--color-gray-200); font-family: var(--font-ui); font-size: 0.75rem; color: var(--color-gray-600);">
+          <span>{today}</span>
+          <span>Internet Standards Archive</span>
+        </div>
+        
+        <!-- Masthead -->
+        <div style="text-align: center; padding: 1.5rem 0; border-bottom: 1px solid var(--color-gray-200);">
+          <a href="/" style="color: inherit; text-decoration: none;">
+            <h1 class="font-headline" style="font-size: 2.75rem; letter-spacing: -0.02em; margin-bottom: 0.25rem;">
+              The RFC Journal
+            </h1>
+          </a>
+          <p class="font-ui" style="font-size: 0.6875rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-gray-600);">
+            Internet Protocol Standards Since 1980
+          </p>
+        </div>
+        
+        <!-- Navigation -->
+        <nav style="display: flex; justify-content: center; gap: 2rem; padding: 0.75rem 0;">
+          <a href="/" class="font-ui" style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-black);">Home</a>
+          <a href="/protocol/udp" class="font-ui" style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-black);">UDP</a>
+          <a href="/protocol/quic" class="font-ui" style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-black);">QUIC</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main style="padding: 2rem 0 4rem;">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: var(--color-white); border-top: 2px solid var(--color-black); padding: 1.5rem 0;">
+      <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-ui); font-size: 0.75rem; color: var(--color-gray-600);">
+          <p>
+            Data: <a href="https://www.rfc-editor.org/" style="color: var(--color-wsj-blue);">IETF RFC Editor</a>
+          </p>
+          <p class="smallcaps">© 2025 The RFC Journal</p>
+        </div>
+      </div>
+    </footer>
+
+    <style is:global>
+      @import '../styles/global.css';
+    </style>
+  </body>
+</html>
